@@ -26,5 +26,4 @@ public class CitasController {
         return "lista"; // Devuelve el nombre de la plantilla Thymeleaf
     }
 
-    
 }
