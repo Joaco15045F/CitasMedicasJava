@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Gestión de Citas Médicas</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2><a href="#" onclick="loadMenu()">Menú</a></h2>
+            <ul>
+                <li><a href="#" class="menu-item">Administrador</a>
+                    <ul class="submenu">
+                        <li><a href="#">Listar Usuarios</a></li>
+                        <li><a href="#">Login</a></li>
+                        <li><a href="#">Logout</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" class="menu-item">Médicos</a>
+                    <ul class="submenu">
+                        <li><a href="#" onclick="loadPacientes()">Listar Pacientes</a></li>
+                        <li><a href="#">Llamar Paciente</a></li>
+                        <li><a href="#">Cancelar</a></li>
+                        <li><a href="#">Editar</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" class="menu-item">Pacientes</a>
+                    <ul class="submenu">
+                        <li><a href="#">Emitir Ticket</a></li>
+                        <li><a href="#">Cita Médica</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <h1>Bienvenido a la Gestión de Citas Médicas</h1>
+            <p>Seleccione una opción del menú lateral izquierdo.</p>
+            <div id="content">
+                <!-- Aquí se cargará dinámicamente el contenido -->
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.menu-item').click(function (e) {
+                e.preventDefault();
+                var $submenu = $(this).next('.submenu');
+                $('.submenu').not($submenu).slideUp();
+                $submenu.slideToggle();
+            });
+        });
+
+        function loadPacientes() {
+            $.get('/citas/listar-pacientes', function (data) {
+                $('#content').html(data);
+            });
+        }
+
+        function loadMenu() {
+            $('#content').html('<h1>Bienvenido a la Gestión de Citas Médicas</h1><p>Seleccione una opción del menú lateral izquierdo.</p>');
+        }
+    </script>
+
+</body>
+
+</html>

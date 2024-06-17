@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de Citas</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <h1>Listado de Citas</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Fecha y Hora</th>
+                <th>Nombre del Paciente</th>
+                <th>Nombre del Médico</th>
+                <th>Motivo</th>
+                <th>Observaciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Iterar sobre la lista de citas y mostrar cada una -->
+            <!-- Utiliza Thymeleaf para iterar sobre la lista de citas -->
+            <tr th:each="cita : ${citas}">
+                <td th:text="${cita.id}"></td>
+                <td th:text="${#temporals.format(cita.fechaHora.plusHours(4), 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${cita.pacienteNombre}"></td>
+                <td th:text="${cita.medicoNombre}"></td>
+                <td th:text="${cita.motivo}"></td>
+                <td th:text="${cita.observaciones}"></td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="/citas/nueva">Nueva Cita</a>
+</body>
+
+</html>
