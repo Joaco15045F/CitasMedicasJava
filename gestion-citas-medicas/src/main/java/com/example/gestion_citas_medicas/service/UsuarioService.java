@@ -20,4 +20,12 @@ public class UsuarioService {
     public Usuario createUsuario(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
+
+    public Usuario authenticate(String correo, String password) {
+        Usuario usuario = usuarioRepository.findByCorreo(correo);
+        if (usuario != null && usuario.getContraseña().equals(password)) {
+            return usuario;
+        }
+        return null;
+    }
 }

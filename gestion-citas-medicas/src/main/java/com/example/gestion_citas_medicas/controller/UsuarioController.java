@@ -15,10 +15,10 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @GetMapping("/usuarios/listar")
+    @GetMapping("/usuarios/lista_de_usuarios")
     public String listarUsuarios(Model model) {
         List<Usuario> usuarios = usuarioService.getAllUsuarios();
         model.addAttribute("usuarios", usuarios);
-        return "lista_usuarios"; // Nombre de la plantilla Thymeleaf
+        return "lista_de_usuarios"; // Nombre de la plantilla Thymeleaf
     }
 }
