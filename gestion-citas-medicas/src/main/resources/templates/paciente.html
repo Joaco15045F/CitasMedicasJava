@@ -13,7 +13,7 @@
             <ul>
                 <li><a href="#" class="menu-item">Pacientes</a>
                     <ul class="submenu">
-                        <li><a href="#">Emitir Ticket</a></li>
+                        <li><a href="#" onclick="nuevacita()">Emitir Ticket</a></li>
                         <li><a href="#">Cita Médica</a></li>
                         <li><a href="#" onclick="logout()">Logout</a></li>
                     </ul>
@@ -30,18 +30,24 @@
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-        function logout() {
-            window.location.href = '/';
-        }
+    function logout() {
+        window.location.href = '/';
+    }
 
-        $(document).ready(function () {
-            $('.menu-item').click(function (e) {
-                e.preventDefault();
-                var $submenu = $(this).next('.submenu');
-                $('.submenu').not($submenu).slideUp();
-                $submenu.slideToggle();
-            });
+    $(document).ready(function () {
+        $('.menu-item').click(function (e) {
+            e.preventDefault();
+            var $submenu = $(this).next('.submenu');
+            $('.submenu').not($submenu).slideUp();
+            $submenu.slideToggle();
         });
-    </script>
+    });
+
+    function nuevacita() {
+        $.get('/citas/nueva', function (data) {
+            $('#content').html(data);
+        });
+    }
+</script>
 </body>
 </html>

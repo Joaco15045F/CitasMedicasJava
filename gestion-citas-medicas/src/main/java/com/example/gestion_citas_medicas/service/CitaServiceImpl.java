@@ -19,4 +19,8 @@ public class CitaServiceImpl implements CitaService {
     public List<Cita> getAllCitas() {
         return citaRepository.findAll();
     }
+    @Override
+    public void guardarCita(Cita cita) {
+        citaRepository.save(cita);
+    }
 }
