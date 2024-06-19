@@ -19,4 +19,8 @@ public class CitaServiceImpl implements CitaService {
     public List<Cita> getAllCitas() {
         return citaRepository.findAll();
     }
+    @Override
+    public List<Cita> findByMedicoNombre(String medicoNombre){
+        return citaRepository.findByMedicoNombre(medicoNombre);
+    }
 }
