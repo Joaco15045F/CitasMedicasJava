@@ -23,7 +23,7 @@
             </ul>
         </div>
         <div class="main-content">
-            <h1 >Bienvenido, <span id="nombreMedico"></span></h1>
+            <h1 id="titulo">Bienvenido, <span id="nombreMedico"></span></h1>
             
             <div id="content">
                 <!-- Formulario de login -->
@@ -44,6 +44,8 @@
             $.get(`/citas/buscar-por-medico?medicoNombre=${nombreMedico}`, function (data) {
                 $('#content').html(data);
             });
+
+            document.getElementById('titulo').innerHTML="";
         }
         function logout() {
             window.location.href = '/';
