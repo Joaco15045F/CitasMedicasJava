@@ -23,4 +23,7 @@ public class CitaServiceImpl implements CitaService {
     public void guardarCita(Cita cita) {
         citaRepository.save(cita);
     }
+    public List<Cita> findByMedicoNombre(String medicoNombre){
+        return citaRepository.findByMedicoNombre(medicoNombre);
+    }
 }

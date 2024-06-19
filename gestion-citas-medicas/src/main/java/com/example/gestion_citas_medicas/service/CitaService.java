@@ -7,5 +7,9 @@ import java.util.List;
 public interface CitaService {
     List<Cita> getAllCitas();
 
+
     void guardarCita(Cita cita);
+
+    List<Cita> findByMedicoNombre(String medicoNombre);
+
 }

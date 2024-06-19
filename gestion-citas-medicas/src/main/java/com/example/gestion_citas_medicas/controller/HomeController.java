@@ -24,6 +24,10 @@ public class HomeController {
     public String paciente() {
         return "paciente"; 
     }
+    
+   
+    
+    
 
     //
     /*@PostMapping("/login")

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class CitasController {
         return "lista"; // Devuelve el nombre de la plantilla Thymeleaf
     }
 
+
     @GetMapping("/nueva")
     public String mostrarFormularioNuevaCita(Model model) {
         model.addAttribute("cita", new Cita());
@@ -47,4 +49,12 @@ public class CitasController {
         model.addAttribute("citas", citas);
         return "sacarficha"; // Devuelve el nombre de la plantilla Thymeleaf
     }
-}
+
+    @GetMapping("/buscar-por-medico")
+    public String buscarPorMedico(Model model, @RequestParam("medicoNombre") String medicoNombre) {
+        List<Cita> citas = citaService.findByMedicoNombre(medicoNombre);
+        model.addAttribute("citas", citas);
+        return "lista_de_pacientes"; // Devuelve el nombre de la plantilla Thymeleaf para mostrar los resultados
+
+    }
+} 
