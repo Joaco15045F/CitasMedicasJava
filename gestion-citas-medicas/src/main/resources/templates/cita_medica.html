@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cita Médica</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>Detalle de la Cita Médica</h1>
+    <div>
+        <p><strong>Fecha y Hora:</strong> <span th:text="${citaMedica.fechaHora}"></span></p>
+        <p><strong>Nombre del Paciente:</strong> <span th:text="${citaMedica.pacienteNombre}"></span></p>
+        <p><strong>Nombre del Médico:</strong> <span th:text="${citaMedica.medicoNombre}"></span></p>
+        <p><strong>Motivo:</strong> <span th:text="${citaMedica.motivo}"></span></p>
+        <p><strong>Observaciones:</strong> <span th:text="${citaMedica.observaciones}"></span></p>
+    </div>
+</body>
+</html>

@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Nueva Cita</h1>
-    <form action="/citas/nueva" method="post" th:object="${cita}">
+    <form id="formNuevaCita" th:object="${cita}">
         <div class="form-group">
             <label for="fechaHora">Fecha y Hora</label>
             <input type="datetime-local" id="fechaHora" name="fechaHora" required>

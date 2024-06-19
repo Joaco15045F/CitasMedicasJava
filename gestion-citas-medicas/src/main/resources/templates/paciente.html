@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio - Gestión de Citas Médicas</title>
     <link rel="stylesheet" href="/style.css">
 </head>
+
 <body>
     <div class="container">
         <div class="sidebar">
@@ -14,7 +16,7 @@
                 <li><a href="#" class="menu-item">Pacientes</a>
                     <ul class="submenu">
                         <li><a href="#" onclick="nuevacita()">Emitir Ticket</a></li>
-                        <li><a href="#">Cita Médica</a></li>
+                        <li><a href="#" onclick="mostrarCitaMedica()">Cita Médica</a></li>
                         <li><a href="#" onclick="logout()">Logout</a></li>
                     </ul>
                 </li>
@@ -22,7 +24,7 @@
         </div>
         <div class="main-content">
             <h1>Bienvenido a la Gestión de Citas Médicas</h1>
-            
+
             <div id="content">
                 <!-- Formulario de login -->
             </div>
@@ -30,24 +32,63 @@
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-    function logout() {
-        window.location.href = '/';
-    }
+        function logout() {
+            window.location.href = '/';
+        }
 
-    $(document).ready(function () {
-        $('.menu-item').click(function (e) {
-            e.preventDefault();
-            var $submenu = $(this).next('.submenu');
-            $('.submenu').not($submenu).slideUp();
-            $submenu.slideToggle();
+        $(document).ready(function () {
+            $('.menu-item').click(function (e) {
+                e.preventDefault();
+                var $submenu = $(this).next('.submenu');
+                $('.submenu').not($submenu).slideUp();
+                $submenu.slideToggle();
+            });
         });
-    });
 
-    function nuevacita() {
-        $.get('/citas/nueva', function (data) {
-            $('#content').html(data);
-        });
-    }
-</script>
+        function nuevacita() {
+            var pacienteNombre = prompt("Por favor, ingrese su nombre:");
+            if (pacienteNombre) {
+                $.get('/citas/tiene-cita', { pacienteNombre: pacienteNombre }, function (data) {
+                    if (data) {
+                        $('#content').html('<h3>Usted ya tiene una cita reservada.</h3>');
+                    } else {
+                        $.get('/citas/nueva', function (data) {
+                            $('#content').html(data);
+
+                            // Manejar el envío del formulario a través de AJAX
+                            $('form').submit(function (e) {
+                                e.preventDefault();
+                                var formData = $(this).serialize();
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '/citas/nueva',
+                                    data: formData,
+                                    success: function (response) {
+                                        // Mostrar mensaje de confirmación
+                                        $('#content').html('<h3>' + response + '</h3>');
+                                    },
+                                    error: function () {
+                                        // Manejar errores si es necesario
+                                        alert('Ocurrió un error al reservar la cita.');
+                                    }
+                                });
+                            });
+                        });
+                    }
+                });
+            }
+        }
+        function mostrarCitaMedica() {
+            var pacienteNombre = prompt("Por favor, ingrese su nombre:");
+            if (pacienteNombre) {
+                $.get('/citas/cita-medica', { pacienteNombre: pacienteNombre }, function (data) {
+                    $('#content').html(data);
+                }).fail(function () {
+                    alert('No se pudo cargar la información de la cita médica.');
+                });
+            }
+        }
+    </script>
 </body>
+
 </html>
