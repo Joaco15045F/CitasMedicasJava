@@ -19,9 +19,10 @@
         </thead>
         <tbody>
             <tr th:each="cita, row : ${citas}"
-                th:if="${#temporals.format(cita.fechaHora.plusHours(4), 'yyyy-MM-dd') == #temporals.format(#temporals.createNow().plusHours(4), 'yyyy-MM-dd')}">
+                th:if="${#temporals.format(cita.fechaHora.plusHours(4), 'yyyy-MM-dd') == #temporals.format(#temporals.createNow().plusHours(-4), 'yyyy-MM-dd')}">
                 <td th:text="${#temporals.format(cita.fechaHora.plusHours(4), 'HH:mm')}"></td>
                 <td th:text="${cita.pacienteNombre}"></td>
+                <input type="hidden" th:value="${cita.id}" th:id="'citaId_' + ${row.index}" />
                 <td class="boton"><button onclick="cancelarCita(this)">Cancelar</button></td>
             </tr>
         </tbody>
@@ -36,6 +37,7 @@
                 <th>Nombre del Paciente</th>
                 <th>Motivo</th>
                 <th>Observaciones</th>
+                <th> </th>
             </tr>
         </thead>
         <tbody>
@@ -47,6 +49,7 @@
                 <td th:text="${cita.pacienteNombre}"></td>
                 <td th:text="${cita.motivo}"></td>
                 <td th:text="${cita.observaciones}"></td>
+                <td class="estado"></td>
             </tr>
         </tbody>
     </table>
@@ -55,12 +58,39 @@
         function cancelarCita(button) {
             // Obtener la fila padre del botón (fila de la cita)
             const row = button.closest('tr');
-            // Cambiar el texto del botón a 'Listo'
-            button.textContent = 'Listo';
-            // Cambiar la clase del botón para el nuevo estilo
-            button.classList.add('listo-button');
-            // Deshabilitar el botón
-            button.disabled = true;
+            row.remove();
+
+            var citaId = button.closest('tr').querySelector('input[type="hidden"]').value;
+            //console.log('ID de la cita a cancelar:', citaId);
+
+            // Encontrar la fila correspondiente en la tabla de citas y actualizar el estado
+            const citasTable = document.querySelector('.citas-table tbody');
+            const filasCitas = citasTable.querySelectorAll('tr');
+
+            filasCitas.forEach(fila => {
+                // Obtener el ID de la cita de esta fila
+                const idCita = fila.querySelector('td:first-child').textContent;
+
+                // Verificar si el ID de la cita coincide con el ID que se está cancelando
+                if (idCita === citaId) {
+                    // Actualizar el estado de la cita (aquí puedes agregar el estado que quieras)
+                    fila.querySelector('.estado').textContent = 'Cancelada';
+                }
+            });
+        }
+        function llamarPaciente() {
+            // Seleccionar el primer botón en la tabla de la agenda que no esté deshabilitado
+            const button = document.querySelector('.agenda-table .boton button:not([disabled])');
+            if (button) {
+                // Cambiar el texto del botón a 'Listo'
+                button.textContent = 'Listo';
+                // Cambiar la clase del botón para el nuevo estilo
+                button.classList.add('listo-button');
+                // Deshabilitar el botón
+                button.disabled = true;
+            }
+
+
         }
     </script>
 </body>

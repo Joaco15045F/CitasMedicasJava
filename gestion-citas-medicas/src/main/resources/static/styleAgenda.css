@@ -65,3 +65,26 @@ button {
     background-color: green;
     color: white;
 }
+
+.llamar-paciente-button {
+    background-color: #4CAF50; /* Verde */
+    border: none;
+    width: 250px;
+    height: 70px;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition-duration: 0.4s;
+}
+
+.llamar-paciente-button:hover {
+    background-color: rgb(208, 255, 170);
+    color: black;
+    border: 2px solid #4CAF50;
+}
