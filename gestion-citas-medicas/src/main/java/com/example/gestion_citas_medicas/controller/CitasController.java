@@ -1,17 +1,14 @@
 package com.example.gestion_citas_medicas.controller;
 
 import com.example.gestion_citas_medicas.model.Cita;
+import com.example.gestion_citas_medicas.model.Especialidad;
 import com.example.gestion_citas_medicas.service.CitaService;
-
+import com.example.gestion_citas_medicas.service.EspecialidadService;
+import com.example.gestion_citas_medicas.service.MedicoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,9 +17,14 @@ import java.util.List;
 public class CitasController {
 
     private final CitaService citaService;
+    private final MedicoService medicoService;
+    private final EspecialidadService especialidadService;
 
-    public CitasController(CitaService citaService) {
+    public CitasController(CitaService citaService, MedicoService medicoService,
+            EspecialidadService especialidadService) {
         this.citaService = citaService;
+        this.medicoService = medicoService;
+        this.especialidadService = especialidadService;
     }
 
     @GetMapping("/listar-pacientes")
@@ -35,28 +37,25 @@ public class CitasController {
     @GetMapping("/nueva")
     public String mostrarFormularioNuevaCita(Model model) {
         model.addAttribute("cita", new Cita());
+
+        // Obtener la lista de especialidades desde el servicio
+        List<Especialidad> especialidades = especialidadService.obtenerEspecialidades();
+        model.addAttribute("especialidades", especialidades);
+
         return "formulario_cita"; // Nombre de la plantilla Thymeleaf para el formulario
     }
-
-    @GetMapping("/confirmarcita")
-    public String meString(Model model) {
-        model.addAttribute("cita", new Cita());
-        return "mensajeconfirmar"; // Nombre de la plantilla Thymeleaf para el formulario
-    }
-
-    /*
-     * @PostMapping("/nueva")
-     * public String guardarCita(@ModelAttribute("cita") Cita cita) {
-     * // Aquí puedes validar y guardar la nueva cita en la base de datos
-     * citaService.guardarCita(cita);
-     * return "redirect:/citas/listar-pacientes"; // Redirige a la lista de citas
-     * después de guardar
-     * }
-     */
 
     @PostMapping("/nueva")
     @ResponseBody
     public ResponseEntity<String> guardarCita(@ModelAttribute("cita") Cita cita) {
+        // Tomar el nombre de la especialidad elegida por el paciente y guardarlo en la
+        // cita
+        String especialidadNombre = cita.getEspecialidadNombre();
+        cita.setEspecialidadNombre(especialidadNombre);
+
+        // Limpiar el campo especialidad para que no se guarde en la tabla cita
+        // cita.setEspecialidad(null); // Eliminar esta línea
+
         // Validar y guardar la nueva cita en la base de datos
         citaService.guardarCita(cita);
 
@@ -64,21 +63,19 @@ public class CitasController {
         return ResponseEntity.ok("Cita reservada con éxito.");
     }
 
-    /*
-     * @GetMapping("/sacarficha")
-     * public String sacarficha(Model model) {
-     * List<Cita> citas = citaService.getAllCitas();
-     * model.addAttribute("citas", citas);
-     * return "sacarficha"; // Devuelve el nombre de la plantilla Thymeleaf
-     * }
-     */
+    @GetMapping("/medicos-por-especialidad")
+    @ResponseBody
+    public ResponseEntity<List<String>> obtenerMedicosPorEspecialidad(
+            @RequestParam("especialidad") String especialidad) {
+        List<String> medicos = medicoService.obtenerMedicosPorEspecialidad(especialidad);
+        return ResponseEntity.ok(medicos);
+    }
 
     @GetMapping("/buscar-por-medico")
     public String buscarPorMedico(Model model, @RequestParam("medicoNombre") String medicoNombre) {
         List<Cita> citas = citaService.findByMedicoNombre(medicoNombre);
         model.addAttribute("citas", citas);
         return "lista_de_pacientes"; // Devuelve el nombre de la plantilla Thymeleaf para mostrar los resultados
-
     }
 
     @GetMapping("/tiene-cita")

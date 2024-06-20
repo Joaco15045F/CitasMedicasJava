@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sin Cita</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>No tiene ninguna cita reservada</h1>
+    <p th:text="${mensaje}"></p>
+    <p><a href="#" onclick="nuevacita()">Emitir Ticket</a></p>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        function nuevacita() {
+            var pacienteNombre = prompt("Por favor, ingrese su nombre:");
+            if (pacienteNombre) {
+                $.get('/citas/tiene-cita', { pacienteNombre: pacienteNombre }, function (data) {
+                    if (data) {
+                        $('#content').html('<h3>Usted ya tiene una cita reservada.</h3>');
+                    } else {
+                        $.get('/citas/nueva', function (data) {
+                            $('#content').html(data);
+                            $('form').submit(function (e) {
+                                e.preventDefault();
+                                var formData = $(this).serialize();
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '/citas/nueva',
+                                    data: formData,
+                                    success: function (response) {
+                                        $('#content').html('<h3>' + response + '</h3>');
+                                    },
+                                    error: function () {
+                                        alert('Ocurrió un error al reservar la cita.');
+                                    }
+                                });
+                            });
+                        });
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

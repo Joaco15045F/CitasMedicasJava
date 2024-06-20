@@ -23,7 +23,7 @@
             </ul>
         </div>
         <div class="main-content">
-            <h1>Bienvenido a la Gestión de Citas Médicas</h1>
+            <h1 >Bienvenido, <span id="pacienteNombre"></span></h1>
 
             <div id="content">
                 <!-- Formulario de login -->
@@ -32,6 +32,13 @@
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
+        // Obtener el valor del parámetro "nombreMedico" de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const pacienteNombre = urlParams.get('pacienteNombre');
+
+        // Mostrar el nombre del médico en el encabezado h1
+        document.getElementById('pacienteNombre').textContent = `${pacienteNombre}`;
+
         function logout() {
             window.location.href = '/';
         }
@@ -46,7 +53,7 @@
         });
 
         function nuevacita() {
-            var pacienteNombre = prompt("Por favor, ingrese su nombre:");
+            //var pacienteNombre = prompt("Por favor, ingrese su nombre:");
             if (pacienteNombre) {
                 $.get('/citas/tiene-cita', { pacienteNombre: pacienteNombre }, function (data) {
                     if (data) {
@@ -79,7 +86,7 @@
             }
         }
         function mostrarCitaMedica() {
-            var pacienteNombre = prompt("Por favor, ingrese su nombre:");
+            //var pacienteNombre = prompt("Por favor, ingrese su nombre:");
             if (pacienteNombre) {
                 $.get('/citas/cita-medica', { pacienteNombre: pacienteNombre }, function (data) {
                     $('#content').html(data);
@@ -88,6 +95,9 @@
                 });
             }
         }
+
+
+        
     </script>
 </body>
 

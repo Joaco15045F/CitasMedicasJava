@@ -19,7 +19,7 @@
         </thead>
         <tbody>
             <tr th:each="cita, row : ${citas}"
-                th:if="${#temporals.format(cita.fechaHora.plusHours(4), 'yyyy-MM-dd') == #temporals.format(#temporals.createNow().plusHours(-4), 'yyyy-MM-dd')}">
+                th:if="${#temporals.format(cita.fechaHora.plusHours(4), 'yyyy-MM-dd') == #temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}">
                 <td th:text="${#temporals.format(cita.fechaHora.plusHours(4), 'HH:mm')}"></td>
                 <td th:text="${cita.pacienteNombre}"></td>
                 <input type="hidden" th:value="${cita.id}" th:id="'citaId_' + ${row.index}" />

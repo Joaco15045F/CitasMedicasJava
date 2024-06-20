@@ -30,6 +30,7 @@ public class LoginController {
                 redirectAttributes.addAttribute("nombreMedico", usuario.getNombre());
                     return "redirect:/medico";
                 case paciente:
+                redirectAttributes.addAttribute("pacienteNombre", usuario.getNombre());
                     return "redirect:/paciente";
                 default:
                     return "redirect:/error";

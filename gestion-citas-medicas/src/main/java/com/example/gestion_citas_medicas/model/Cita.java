@@ -1,13 +1,12 @@
 package com.example.gestion_citas_medicas.model;
 
-
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 import java.time.LocalDateTime;
 
@@ -33,7 +32,10 @@ public class Cita {
     @Column(name = "observaciones", columnDefinition = "text")
     private String observaciones;
 
-    // Getters and setters
+    @Transient // No persistir este campo en la base de datos
+    private String especialidadNombre; // Campo para almacenar el nombre de la especialidad elegida
+
+    // Getters y setters
 
     public Long getId() {
         return id;
@@ -82,4 +84,14 @@ public class Cita {
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
+
+    public String getEspecialidadNombre() {
+        return especialidadNombre;
+    }
+
+    public void setEspecialidadNombre(String especialidadNombre) {
+        this.especialidadNombre = especialidadNombre;
+    }
 }
+
+

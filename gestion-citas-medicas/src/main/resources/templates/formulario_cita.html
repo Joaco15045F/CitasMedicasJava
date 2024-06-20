@@ -1,34 +1,69 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Nueva Cita</title>
-    <link rel="stylesheet" href="/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script th:src="@{/js/cargarEspecialidades.js}"></script>
+    <script th:inline="javascript">
+        $(document).ready(function() {
+            $('#especialidad').change(function() {
+                var especialidad = $(this).val();
+                $.ajax({
+                    type: 'GET',
+                    url: '/citas/medicos-por-especialidad',
+                    data: { especialidad: especialidad },
+                    success: function(medicos) {
+                        $('#medicoNombre').empty();
+                        $.each(medicos, function(index, medico) {
+                            $('#medicoNombre').append('<option value="' + medico + '">' + medico + '</option>');
+                        });
+                    },
+                    error: function() {
+                        alert('Error al cargar los médicos por especialidad.');
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
-    <h1>Nueva Cita</h1>
-    <form id="formNuevaCita" th:object="${cita}">
-        <div class="form-group">
-            <label for="fechaHora">Fecha y Hora</label>
-            <input type="datetime-local" id="fechaHora" name="fechaHora" required>
-        </div>
-        <div class="form-group">
-            <label for="pacienteNombre">Nombre del Paciente</label>
-            <input type="text" id="pacienteNombre" name="pacienteNombre" required>
-        </div>
-        <div class="form-group">
-            <label for="medicoNombre">Nombre del Médico</label>
-            <input type="text" id="medicoNombre" name="medicoNombre" required>
-        </div>
-        <div class="form-group">
-            <label for="motivo">Motivo de la Cita</label>
-            <input type="text" id="motivo" name="motivo" required>
-        </div>
-        <div class="form-group">
-            <label for="observaciones">Observaciones</label>
-            <textarea id="observaciones" name="observaciones"></textarea>
-        </div>
-        <button type="submit">Guardar Cita</button>
-    </form>
+
+<h2>Nueva Cita</h2>
+
+<form id="formNuevaCita" action="#" th:action="@{/citas/nueva}" th:object="${cita}" method="post">
+    <div>
+        <label for="fechaHora">Fecha y Hora:</label>
+        <input type="datetime-local" id="fechaHora" name="fechaHora" th:field="*{fechaHora}" required>
+    </div>
+    <div>
+        <label for="pacienteNombre">Nombre del Paciente:</label>
+        <input type="text" id="pacienteNombre" name="pacienteNombre" th:field="*{pacienteNombre}" required>
+    </div>
+    <div>
+        <label for="especialidad">Especialidad:</label>
+        <select id="especialidad" name="especialidadNombre" th:field="*{especialidadNombre}" required>
+            <option value="">Seleccione una especialidad</option>
+            <option th:each="especialidad : ${especialidades}" th:value="${especialidad.nombre}" th:text="${especialidad.nombre}"></option>
+        </select>
+    </div>
+    <div>
+        <label for="medicoNombre">Médico:</label>
+        <select id="medicoNombre" name="medicoNombre" th:field="*{medicoNombre}" required>
+            <option value="">Seleccione un médico</option>
+        </select>
+    </div>
+    <div>
+        <label for="motivo">Motivo de la Cita:</label>
+        <input type="text" id="motivo" name="motivo" th:field="*{motivo}">
+    </div>
+    <div>
+        <label for="observaciones">Observaciones:</label>
+        <textarea id="observaciones" name="observaciones" th:field="*{observaciones}"></textarea>
+    </div>
+    <button type="submit">Reservar Cita</button>
+</form>
+
+
 </body>
 </html>
