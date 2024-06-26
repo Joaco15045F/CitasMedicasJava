@@ -97,7 +97,7 @@ public class CitasController {
         } else {
             // Manejo de error si el paciente no tiene citas
             model.addAttribute("mensaje", "No se encontraron citas médicas para el paciente.");
-            return "error"; // Página de error personalizada
+            return "sin_cita"; // Página de error personalizada
         }
     }
 }
